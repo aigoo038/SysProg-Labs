@@ -17,7 +17,7 @@ namespace sh
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new l1.Form1());
+            Application.Run(new l1.Lab4());
         }
     }
 }

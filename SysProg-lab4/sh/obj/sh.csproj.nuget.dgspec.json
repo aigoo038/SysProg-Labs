@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab4\\sh\\sh.csproj": {}
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\sh\\sh.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab4\\sh\\sh.csproj": {
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\sh\\sh.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab4\\sh\\sh.csproj",
+        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\sh\\sh.csproj",
         "projectName": "sh",
-        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab4\\sh\\sh.csproj",
+        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\sh\\sh.csproj",
         "packagesPath": "C:\\Users\\vladi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab4\\sh\\obj\\",
+        "outputPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\sh\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\vladi\\AppData\\Roaming\\NuGet\\NuGet.Config",
