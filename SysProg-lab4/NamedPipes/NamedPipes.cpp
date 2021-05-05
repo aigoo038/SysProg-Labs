@@ -66,10 +66,8 @@ extern "C"
 		{
 			HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 			DWORD dwRead, dwWrite;
-			if (eventType != 0) {
-				DWORD dwWrite;
-				WriteFile(hPipe, LPCVOID(msg), sizeof(strlen(msg) + 1), &dwWrite, NULL);
-			}
+			DWORD dwWrite;
+			WriteFile(hPipe, LPCVOID(msg), sizeof(strlen(msg) + 1), &dwWrite, NULL);
 			CloseHandle(hPipe);
 		}
 	}
