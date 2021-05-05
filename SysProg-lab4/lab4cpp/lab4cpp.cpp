@@ -1,30 +1,18 @@
-﻿
-#include "pch.h"
+﻿#include "pch.h"
 #include "framework.h"
 #include "lab4cpp.h"
-#include <iostream>
-#include <thread>
-#include <vector>
-#include <Windows.h>
-#include <conio.h>
-#include <fstream>
-#include <thread>
-#include <vector>
+
 
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+#define PIPE_NAME (LPCSTR)"\\\\.\\pipe\\YeahPipe"
 CWinApp theApp;
 
 using namespace std;
 
-struct Message 
-{ 
-    int index; 
-    char data[]; 
-};
 
 std::string toStr(int i)
 {
@@ -36,20 +24,34 @@ std::string toStr(int i)
 }
 
 
-UINT __cdecl YeahThread(LPVOID lpParameter)
+UINT __cdecl YeahThread(HANDLE NamedPipe, LPVOID lpParameter)
 {
     int id = int(lpParameter);
     auto StopName = "EventStop" + toStr(id);
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
+
+    HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
+
+    WaitForSingleObject(hMutex, INFINITE);
+    std::cout << "\nThread started  " << toStr(id) << std::endl;
+    ReleaseMutex(hMutex);
 
 
+        int s = -1;//GetString(NamedPipe);
+        DWORD dwRead;
+        ReadFile(NamedPipe, LPVOID(&s), sizeof(s), &dwRead, NULL);
+        cout << s << endl;
+
+        //SendInt(NamedPipe, id);
+        if (s == 1)
+        {
+            WaitForSingleObject(hMutex, INFINITE);
+            std::cout << "\nThread stopped  " << toStr(id) << std::endl;
+            ReleaseMutex(hMutex);
+            return 0;
+        }
+
+    DisconnectNamedPipe(NamedPipe);
+    CloseHandle(NamedPipe);
     return 0;
 }
 
@@ -58,45 +60,64 @@ void start() {
     int thread_index = 1;
 
     SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-    thread th(YeahThread, (LPVOID)thread_index++);
-    th.detach();
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
-    // CHANGE!
 
-}
-
-void LaunchClient()
-{
-    STARTUPINFO si = { sizeof(si) };
-    PROCESS_INFORMATION pi;
-    CreateProcess(NULL, (LPSTR)"PipesClient.exe", NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
-    CloseHandle(pi.hThread);
-    CloseHandle(pi.hProcess);
-}
-
-
-void ProcessClient(HANDLE hPipe)
-{
-    static int i = 0;
     while (true)
     {
-        string s = GetString(hPipe);
-        cout << s << endl;
-        if (s == "quit")
+        HANDLE hPipe = CreateNamedPipe(PIPE_NAME, PIPE_ACCESS_DUPLEX, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, PIPE_UNLIMITED_INSTANCES, 1024, 1024, 0, NULL);
+        DWORD dwRead;
+        int id_event = 1;
+        ConnectNamedPipe(hPipe, NULL);
+        ReadFile(hPipe, LPVOID(&id_event), sizeof(id_event), &dwRead, NULL);
+        switch (id_event)
         {
+        case 0:
+        {
+            thread t(YeahThread, &hPipe, (LPVOID)thread_index++);
+            t.detach();
             break;
         }
-        SendInt(hPipe, ++i);
+
+        case 1:
+        {
+            // Stop thread
+            if (!(thread_index == 1))
+            {
+                auto StopName = "EventStop" + toStr(thread_index--);
+                HANDLE hlEventStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
+                SetEvent(hlEventStop);
+                ResetEvent(hlEventStop);
+                // SetEvent(evSubmit);
+            }
+            else
+            {
+                return;
+            }
+
+            break;
+        }
+
+        case 2:
+        {
+
+            DWORD dwDone;
+            int nLength = GetInt(hPipe);
+
+            vector <char> v(nLength);
+            ReadFile(hPipe, &v[0], nLength, &dwDone, NULL);
+
+            vector <char> msg(GetInt(hPipe));
+            // Read mesage
+            int size = 0;
+            ReadFile(hPipe, LPVOID(&size), sizeof(size), &dwRead, NULL);
+            msg.push_back(size);
+            ReadFile(hPipe, &msg, size, &dwRead, NULL);
+            FlushFileBuffers(hPipe);
+            DisconnectNamedPipe(hPipe);
+        }
+        }
     }
-    DisconnectNamedPipe(hPipe);
-    CloseHandle(hPipe);
+    // DisconnectNamedPipe(hPipe);
+    // CloseHandle(hPipe);
 }
 
 

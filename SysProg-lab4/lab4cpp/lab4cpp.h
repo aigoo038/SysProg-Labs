@@ -1,7 +1,14 @@
 #pragma once
-
 #include "resource.h"
 #include <string>
+#include <vector>
+#include <iostream>
+#include <thread>
+#include <vector>
+#include <Windows.h>
+#include <conio.h>
+#include <fstream>
+#include <thread>
 #include <vector>
 
 using namespace std;
