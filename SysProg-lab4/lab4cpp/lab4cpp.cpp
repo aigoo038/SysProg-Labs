@@ -36,12 +36,10 @@ UINT __cdecl YeahThread(HANDLE NamedPipe, LPVOID lpParameter)
     ReleaseMutex(hMutex);
 
 
-        int s = -1;//GetString(NamedPipe);
+        int s = -1;
         DWORD dwRead;
         ReadFile(NamedPipe, LPVOID(&s), sizeof(s), &dwRead, NULL);
         cout << s << endl;
-
-        //SendInt(NamedPipe, id);
         if (s == 1)
         {
             WaitForSingleObject(hMutex, INFINITE);
@@ -86,7 +84,6 @@ void start() {
                 HANDLE hlEventStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
                 SetEvent(hlEventStop);
                 ResetEvent(hlEventStop);
-                // SetEvent(evSubmit);
             }
             else
             {
