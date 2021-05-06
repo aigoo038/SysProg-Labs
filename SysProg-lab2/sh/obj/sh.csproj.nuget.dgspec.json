@@ -1,27 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\sh\\sh.csproj": {}
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\sh\\sh.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\Message\\Message.vcxproj": {
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\Message\\Message.vcxproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\Message\\Message.vcxproj",
+        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\Message\\Message.vcxproj",
         "projectName": "Message",
-        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\Message\\Message.vcxproj"
+        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\Message\\Message.vcxproj"
       },
       "frameworks": {
         "native": {}
       }
     },
-    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\sh\\sh.csproj": {
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\sh\\sh.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\sh\\sh.csproj",
+        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\sh\\sh.csproj",
         "projectName": "sh",
-        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\sh\\sh.csproj",
+        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\sh\\sh.csproj",
         "packagesPath": "C:\\Users\\vladi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\sh\\obj\\",
+        "outputPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\sh\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\vladi\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -38,8 +38,8 @@
           "net5.0-windows7.0": {
             "targetAlias": "net5.0-windows",
             "projectReferences": {
-              "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\Message\\Message.vcxproj": {
-                "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg_Lab2\\Message\\Message.vcxproj"
+              "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\Message\\Message.vcxproj": {
+                "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab2\\Message\\Message.vcxproj"
               }
             }
           }
