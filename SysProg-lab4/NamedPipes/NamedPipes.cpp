@@ -128,16 +128,12 @@ extern "C"
 			int strSize = strlen(msg) + 1;
 			HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 			DWORD dwRead, dwWrite;
-<<<<<<< HEAD
 			WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
 			WriteFile(hPipe, LPCVOID(&thId), sizeof(thId), &dwWrite, NULL); 
 			WriteFile(hPipe, LPCVOID(&strSize), sizeof(strSize), &dwWrite, NULL);
 			WriteFile(hPipe, LPCVOID(msg), sizeof(strSize), &dwWrite, NULL);
-
-=======
 			DWORD dwWrite;
 			WriteFile(hPipe, LPCVOID(msg), sizeof(strlen(msg) + 1), &dwWrite, NULL);
->>>>>>> f0ff0e14e3a7065803d94f18be682274a396f0a0
 			CloseHandle(hPipe);
 		}
 	}
