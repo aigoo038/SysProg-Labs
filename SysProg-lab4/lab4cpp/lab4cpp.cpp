@@ -14,7 +14,7 @@ CWinApp theApp;
 using namespace std;
 
 
-std::string toStr(int i)
+string toStr(int i)
 {
     std::string s;
     std::stringstream out;
@@ -23,33 +23,38 @@ std::string toStr(int i)
     return s;
 }
 
+void WriteFile(int index, string data)
+{
+    CString filename;
+    filename.Format("..\\%d.txt", index);
+    std::ofstream f;
+    f.open(filename, std::ios::app);
+    f << data.c_str() << std::endl;
+    f.close();
+    std::cout << "\nThread " + toStr(index) + " created file " << std::endl;
+}
+
+string thredToStop = "";
+
 
 UINT __cdecl YeahThread(HANDLE NamedPipe, LPVOID lpParameter)
 {
     int id = int(lpParameter);
+
+    auto myid = this_thread::get_id();
+    stringstream ss;
+    ss << myid;
+    thredToStop = ss.str();
+
     auto StopName = "EventStop" + toStr(id);
 
     HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
+    HANDLE hEventStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
 
     WaitForSingleObject(hMutex, INFINITE);
     std::cout << "\nThread started  " << toStr(id) << std::endl;
     ReleaseMutex(hMutex);
-
-
-        int s = -1;
-        DWORD dwRead;
-        ReadFile(NamedPipe, LPVOID(&s), sizeof(s), &dwRead, NULL);
-        cout << s << endl;
-        if (s == 1)
-        {
-            WaitForSingleObject(hMutex, INFINITE);
-            std::cout << "\nThread stopped  " << toStr(id) << std::endl;
-            ReleaseMutex(hMutex);
-            return 0;
-        }
-
-    DisconnectNamedPipe(NamedPipe);
-    CloseHandle(NamedPipe);
+    HANDLE hEvents[] = { hEventStop };
     return 0;
 }
 
@@ -62,11 +67,14 @@ void start() {
     while (true)
     {
         HANDLE hPipe = CreateNamedPipe(PIPE_NAME, PIPE_ACCESS_DUPLEX, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, PIPE_UNLIMITED_INSTANCES, 1024, 1024, 0, NULL);
-        DWORD dwRead;
-        int id_event = 1;
+        HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
+
+        DWORD dwRead, dwWrite;
+        int evType = NULL;
         ConnectNamedPipe(hPipe, NULL);
-        ReadFile(hPipe, LPVOID(&id_event), sizeof(id_event), &dwRead, NULL);
-        switch (id_event)
+        auto s = "";
+        ReadFile(hPipe, LPVOID(&evType), sizeof(evType), &dwRead, NULL);
+        switch (evType)
         {
         case 0:
         {
@@ -80,10 +88,9 @@ void start() {
             // Stop thread
             if (!(thread_index == 1))
             {
-                auto StopName = "EventStop" + toStr(thread_index--);
-                HANDLE hlEventStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
-                SetEvent(hlEventStop);
-                ResetEvent(hlEventStop);
+  
+                
+             
             }
             else
             {
@@ -95,26 +102,39 @@ void start() {
 
         case 2:
         {
+            int thId, msgSize = NULL;
+            DWORD msgRead;
+            char* msg;
+            msg = new char[msgSize];
+            
 
-            DWORD dwDone;
-            int nLength = GetInt(hPipe);
-
-            vector <char> v(nLength);
-            ReadFile(hPipe, &v[0], nLength, &dwDone, NULL);
-
-            vector <char> msg(GetInt(hPipe));
-            // Read mesage
-            int size = 0;
-            ReadFile(hPipe, LPVOID(&size), sizeof(size), &dwRead, NULL);
-            msg.push_back(size);
-            ReadFile(hPipe, &msg, size, &dwRead, NULL);
+            ReadFile(hPipe, LPVOID(&thId), sizeof(thId), &msgRead, NULL);
+            ReadFile(hPipe, LPVOID(&msgSize), sizeof(msgSize), &msgRead, NULL);
+            ReadFile(hPipe, LPVOID(msg), sizeof(msgSize), &msgRead, NULL);
             FlushFileBuffers(hPipe);
             DisconnectNamedPipe(hPipe);
+            std::string myString(msg, msgSize);
+            if (!thId == 0)
+            {
+                WriteFile(thId, myString);
+                DisconnectNamedPipe(hPipe);
+                CloseHandle(hPipe);
+            }
+            else
+            {
+                WaitForSingleObject(hMutex, INFINITE);
+                std::cout << "\nReceived Message  " << myString << "from:" << thId << std::endl;
+                ReleaseMutex(hMutex);  
+                DisconnectNamedPipe(hPipe);
+                CloseHandle(hPipe);
+            }
+
+            break;
         }
+
         }
     }
-    // DisconnectNamedPipe(hPipe);
-    // CloseHandle(hPipe);
+    
 }
 
 

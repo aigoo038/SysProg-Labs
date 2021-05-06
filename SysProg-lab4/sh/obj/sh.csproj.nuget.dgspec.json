@@ -4,6 +4,26 @@
     "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\sh\\sh.csproj": {}
   },
   "projects": {
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\lab4cpp\\lab4cpp.vcxproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\lab4cpp\\lab4cpp.vcxproj",
+        "projectName": "lab4cpp",
+        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\lab4cpp\\lab4cpp.vcxproj"
+      },
+      "frameworks": {
+        "native": {}
+      }
+    },
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\NamedPipes\\NamedPipes.vcxproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\NamedPipes\\NamedPipes.vcxproj",
+        "projectName": "NamedPipes",
+        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\NamedPipes\\NamedPipes.vcxproj"
+      },
+      "frameworks": {
+        "native": {}
+      }
+    },
     "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\sh\\sh.csproj": {
       "version": "1.0.0",
       "restore": {
@@ -27,7 +47,14 @@
         "frameworks": {
           "net5.0-windows7.0": {
             "targetAlias": "net5.0-windows",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\lab4cpp\\lab4cpp.vcxproj": {
+                "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\lab4cpp\\lab4cpp.vcxproj"
+              },
+              "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\NamedPipes\\NamedPipes.vcxproj": {
+                "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-lab4\\NamedPipes\\NamedPipes.vcxproj"
+              }
+            }
           }
         },
         "warningProperties": {

@@ -20,16 +20,19 @@ namespace l1
         public int thread_id = 1;
 
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        private static extern void Send(int th_id, StringBuilder msg);
+        private static extern void Send(int evType, int evId, StringBuilder msg);
 
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        private static extern void StartThread(int th_id);
+        private static extern void StartThread(int evType);
 
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        private static extern void StopThread(int th_id);
+        private static extern void StopThread(int evType);
 
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        private static extern void StartServer(int th_id);
+        private static extern void StartServer(int evType);
+
+        [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
+        private static extern void PassTo(int evType, int thId = 0, StringBuilder msg = null);
 
         bool Child = false;
 
@@ -42,7 +45,6 @@ namespace l1
             if (Child == false)
             {
                 StartServer(0);
-                // StartThread(0);
                 listBox1.Items.Add("All Threads\n");
                 listBox1.Items.Add("Main Thread\n");
                 Child = true;
@@ -52,7 +54,6 @@ namespace l1
                 StringBuilder start = new StringBuilder("Start");
                 for (int i = 0; i < thread_number; i++)
                 {
-                    //Send(2, start);
                     StartThread(0);
                     listBox1.Items.Add("id " + thread_id++.ToString() + "\n");
                 }
@@ -93,16 +94,16 @@ namespace l1
                 {
                     for (int i = 1; i < thread_id + 1; i++)
                     {
-                        Send(2, fileText);
+                        Send(2, i, fileText);
                     }
                 }
                 else if (listBox1.SelectedItem.ToString() == "Main Thread\n")
                 {
-                    Send(2, fileText);
+                    Send(2, 0,  fileText);
                 }
                 else
                 {
-                    Send(2, fileText);
+                    Send(2, index, fileText);
                 }
             }
         }

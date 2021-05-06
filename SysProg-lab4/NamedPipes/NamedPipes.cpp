@@ -3,6 +3,7 @@
 #include "pch.h"
 #include "framework.h"
 #include "NamedPipes.h"
+#include <string>
 
 #define PIPE_NAME (LPCSTR)"\\\\.\\pipe\\YeahPipe"
 
@@ -21,23 +22,82 @@ CNamedPipesApp::CNamedPipesApp()
 CNamedPipesApp theApp;
 
 
-extern "C" _declspec(dllexport) void __stdcall StartThread(int eventType)
-{
-	if (WaitNamedPipe(PIPE_NAME, 5000))
-	{
-
-		HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-		DWORD dwRead, dwWrite;
-		WriteFile(hPipe, LPCVOID(&eventType), sizeof(eventType), &dwWrite, NULL);
-		//CloseHandle(hPipe);
-	}
-
-}
 	
 
 extern "C" 
 {
-	_declspec(dllexport) void __stdcall StartServer(int eventType)
+	_declspec(dllexport) void __stdcall PassTo(int evType, int thId = 0, char* msg = 0)
+	{
+		switch (evType)
+		{
+			case 0:
+			{
+				if (WaitNamedPipe(PIPE_NAME, 5000))
+				{
+
+					HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+					DWORD dwRead, dwWrite;
+					WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
+					CloseHandle(hPipe);
+				}
+				break;
+			}
+			case 1:
+			{
+				if (WaitNamedPipe(PIPE_NAME, 5000))
+				{
+					HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+					DWORD dwRead, dwWrite;
+
+					WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
+
+					CloseHandle(hPipe);
+				}
+				break;
+			}
+			case 2:
+			{
+				if (WaitNamedPipe(PIPE_NAME, 5000))
+				{
+					int strSize = strlen(msg) + 1;
+					HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+					DWORD dwRead, dwWrite;
+					WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
+					WriteFile(hPipe, LPCVOID(&thId), sizeof(thId), &dwWrite, NULL);
+					WriteFile(hPipe, LPCVOID(&strSize), sizeof(strSize), &dwWrite, NULL);
+					WriteFile(hPipe, LPCVOID(msg), sizeof(strSize), &dwWrite, NULL);
+					CloseHandle(hPipe);
+				}
+				break;
+			}
+			case 3:
+			{
+			
+				STARTUPINFO si = { sizeof(si) };
+				PROCESS_INFORMATION pi;
+				CreateProcess(NULL, (LPSTR)"..\\..\\Debug\\lab4cpp.exe", NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
+				CloseHandle(pi.hThread);
+				CloseHandle(pi.hProcess);
+			}
+		}
+	}
+
+	_declspec(dllexport) void __stdcall StartThread(int evType)
+	{
+		
+			  if (WaitNamedPipe(PIPE_NAME, 5000))
+			  {
+
+				  HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
+				  DWORD dwRead, dwWrite;
+				  WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
+				  CloseHandle(hPipe);
+			  }
+		
+		
+	}
+
+	_declspec(dllexport) void __stdcall StartServer(int evType)
 	{
 		STARTUPINFO si = { sizeof(si) };
 		PROCESS_INFORMATION pi;
@@ -47,29 +107,32 @@ extern "C"
 	}
 
 
-	_declspec(dllexport) void __stdcall StopThread(int eventType)
+	_declspec(dllexport) void __stdcall StopThread(int evType)
 	{
 		if (WaitNamedPipe(PIPE_NAME, 5000))
 		{
 			HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 			DWORD dwRead, dwWrite;
 
-			WriteFile(hPipe, LPCVOID(&eventType), sizeof(eventType), &dwWrite, NULL);
+			WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
 
 			CloseHandle(hPipe);
 		}
 	}
 
 
-	 _declspec(dllexport) void __stdcall Send(int eventType, char* msg) {
+	 _declspec(dllexport) void __stdcall Send(int evType, int thId, char* msg) 
+	 {
 		if (WaitNamedPipe(PIPE_NAME, 5000))
 		{
+			int strSize = strlen(msg) + 1;
 			HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 			DWORD dwRead, dwWrite;
-			if (eventType != 0) {
-				DWORD dwWrite;
-				WriteFile(hPipe, LPCVOID(msg), sizeof(strlen(msg) + 1), &dwWrite, NULL);
-			}
+			WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
+			WriteFile(hPipe, LPCVOID(&thId), sizeof(thId), &dwWrite, NULL); 
+			WriteFile(hPipe, LPCVOID(&strSize), sizeof(strSize), &dwWrite, NULL);
+			WriteFile(hPipe, LPCVOID(msg), sizeof(strSize), &dwWrite, NULL);
+
 			CloseHandle(hPipe);
 		}
 	}
