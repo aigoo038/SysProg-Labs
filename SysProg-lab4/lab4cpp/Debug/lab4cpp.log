@@ -1,4 +1,1 @@
-﻿  lab4cpp.cpp
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\lab4cpp\lab4cpp.cpp(70,23): warning C4101: dwWrite: неиспользованная локальная переменная
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\lab4cpp\lab4cpp.cpp(113,28): warning C4101: msgLen: неиспользованная локальная переменная
-  lab4cpp.vcxproj -> C:\Users\vladi\Desktop\SysProg\SysProg-lab4\Debug\lab4cpp.exe
+﻿  lab4cpp.vcxproj -> C:\Users\vladi\Desktop\SysProg\SysProg-lab4\Debug\lab4cpp.exe

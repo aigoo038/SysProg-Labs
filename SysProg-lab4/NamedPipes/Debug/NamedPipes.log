@@ -1,10 +1,6 @@
-﻿  pch.cpp
-  NamedPipes.cpp
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(40,12): warning C4101: dwRead: неиспользованная локальная переменная
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(51,12): warning C4101: dwRead: неиспользованная локальная переменная
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(65,12): warning C4101: dwRead: неиспользованная локальная переменная
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(92,13): warning C4101: dwRead: неиспользованная локальная переменная
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(115,10): warning C4101: dwRead: неиспользованная локальная переменная
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(130,10): warning C4101: dwRead: неиспользованная локальная переменная
+﻿  NamedPipes.cpp
+C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(36,12): warning C4101: dwRead: неиспользованная локальная переменная
+C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(47,12): warning C4101: dwRead: неиспользованная локальная переменная
+C:\Users\vladi\Desktop\SysProg\SysProg-lab4\NamedPipes\NamedPipes.cpp(61,12): warning C4101: dwRead: неиспользованная локальная переменная
      Создается библиотека C:\Users\vladi\Desktop\SysProg\SysProg-lab4\Debug\NamedPipes.lib и объект C:\Users\vladi\Desktop\SysProg\SysProg-lab4\Debug\NamedPipes.exp
   NamedPipes.vcxproj -> C:\Users\vladi\Desktop\SysProg\SysProg-lab4\Debug\NamedPipes.dll

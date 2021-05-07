@@ -29,9 +29,6 @@ namespace l1
         private static extern void StopThread(int evType);
 
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        private static extern void StartServer(int evType);
-
-        [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
         private static extern void PassTo(int evType, int thId = 0, StringBuilder msg = null);
 
         bool Server = false;
