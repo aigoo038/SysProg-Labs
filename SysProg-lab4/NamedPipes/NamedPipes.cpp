@@ -4,6 +4,7 @@
 #include "framework.h"
 #include "NamedPipes.h"
 #include <string>
+#include "..\\lab4cpp\\lab4cpp.h"
 
 #define PIPE_NAME (LPCSTR)"\\\\.\\pipe\\YeahPipe"
 
@@ -72,7 +73,6 @@ extern "C"
 			}
 			case 3:
 			{
-			
 				STARTUPINFO si = { sizeof(si) };
 				PROCESS_INFORMATION pi;
 				CreateProcess(NULL, (LPSTR)"..\\..\\Debug\\lab4cpp.exe", NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
@@ -121,23 +121,17 @@ extern "C"
 	}
 
 
-	 _declspec(dllexport) void __stdcall Send(int evType, int thId, char* msg) 
+	 _declspec(dllexport) void __stdcall Send(int evType, int thId, const char* msg) 
 	 {
 		if (WaitNamedPipe(PIPE_NAME, 5000))
 		{
 			int strSize = strlen(msg) + 1;
 			HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-			DWORD dwRead, dwWrite;
-<<<<<<< HEAD
+			DWORD dwRead, dwWrite;			
 			WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
 			WriteFile(hPipe, LPCVOID(&thId), sizeof(thId), &dwWrite, NULL); 
-			WriteFile(hPipe, LPCVOID(&strSize), sizeof(strSize), &dwWrite, NULL);
-			WriteFile(hPipe, LPCVOID(msg), sizeof(strSize), &dwWrite, NULL);
-
-=======
-			DWORD dwWrite;
-			WriteFile(hPipe, LPCVOID(msg), sizeof(strlen(msg) + 1), &dwWrite, NULL);
->>>>>>> f0ff0e14e3a7065803d94f18be682274a396f0a0
+			//WriteFile(hPipe, LPCVOID(&strSize), sizeof(strSize), &dwWrite, NULL);
+			WriteFile(hPipe, LPCVOID(msg), strlen(msg), &dwWrite, NULL);
 			CloseHandle(hPipe);
 		}
 	}

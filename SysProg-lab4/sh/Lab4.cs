@@ -34,44 +34,41 @@ namespace l1
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
         private static extern void PassTo(int evType, int thId = 0, StringBuilder msg = null);
 
-        bool Child = false;
+        bool Server = false;
 
-        public Lab4() { InitializeComponent(); }
+        public Lab4() 
+        { 
+            InitializeComponent(); 
+            //StartServer(0);
+            listBox1.Items.Add("All Threads\n");
+            listBox1.Items.Add("Main Thread\n");
+            //Server = true;
+        }
 
 
         private void Start_Click(object sender, EventArgs e)
         {
-            int thread_number = (int)thread_count.Value;
-            if (Child == false)
-            {
-                StartServer(0);
-                listBox1.Items.Add("All Threads\n");
-                listBox1.Items.Add("Main Thread\n");
-                Child = true;
-            }
-            else
-            {
-                StringBuilder start = new StringBuilder("Start");
+            int thread_number = (int)thread_count.Value;            
+            StringBuilder start = new StringBuilder("Start");
                 for (int i = 0; i < thread_number; i++)
                 {
                     StartThread(0);
                     listBox1.Items.Add("id " + thread_id++.ToString() + "\n");
                 }
-            }
         }
 
         private void Stop_click(object sender, EventArgs e)
         {
 
-            if (!(Child == true))
-                return;
+            //if (!(Server == true))
+            //    return;
             StopThread(1);
 
             if (thread_id > 1)
                 listBox1.Items.RemoveAt(thread_id--);
             else
             {
-                Child = false;
+                Server = false;
                 listBox1.Items.Clear();
 
             }

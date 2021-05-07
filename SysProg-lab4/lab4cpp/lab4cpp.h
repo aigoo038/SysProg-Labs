@@ -13,39 +13,32 @@
 
 using namespace std;
 
-inline int GetInt(HANDLE hPipe)
+string InttoStr(int i)
 {
-	DWORD dwDone;
-	int n;
-
-	ReadFile(hPipe, &n, sizeof(n), &dwDone, NULL);
-	return n;
+    std::string s;
+    std::stringstream out;
+    out << i;
+    s = out.str();
+    return s;
 }
 
-inline void SendInt(HANDLE hPipe, int n, bool bFlush = true)
+void WriteToFile(int index, string data)
 {
-	DWORD dwDone;
-	WriteFile(hPipe, &n, sizeof(n), &dwDone, NULL);
-	if (bFlush)
-		FlushFileBuffers(hPipe);
+    CString filename;
+    filename.Format("..\\%d.txt", index);
+    std::ofstream f;
+    f.open(filename, std::ios::app);
+    f << data.c_str() << std::endl;
+    f.close();
+    std::cout << "\nThread " + InttoStr(index) + " created file " << std::endl;
 }
 
-inline string GetString(HANDLE hPipe)
+string CharToStr(char* a, int size)
 {
-	DWORD dwDone;
-	int nLength = GetInt(hPipe);
-
-	vector <char> v(nLength);
-	ReadFile(hPipe, &v[0], nLength, &dwDone, NULL);
-	return string(&v[0], nLength);
-}
-
-inline void SendString(HANDLE hPipe, const string& s)
-{
-	DWORD dwDone;
-	int nLength = s.length();
-
-	SendInt(hPipe, nLength, false);
-	WriteFile(hPipe, s.c_str(), nLength, &dwDone, NULL);
-	FlushFileBuffers(hPipe);
+    int i;
+    string s = "";
+    for (i = 0; i < size; i++) {
+        s = s + a[i];
+    }
+    return s;
 }
