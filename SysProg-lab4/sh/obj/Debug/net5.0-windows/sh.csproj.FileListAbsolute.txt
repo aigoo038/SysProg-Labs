@@ -115,4 +115,3 @@ C:\Users\vladi\Desktop\SysProg\SysProg-lab4\sh\obj\Debug\net5.0-windows\sh.dll
 C:\Users\vladi\Desktop\SysProg\SysProg-lab4\sh\obj\Debug\net5.0-windows\ref\sh.dll
 C:\Users\vladi\Desktop\SysProg\SysProg-lab4\sh\obj\Debug\net5.0-windows\sh.pdb
 C:\Users\vladi\Desktop\SysProg\SysProg-lab4\sh\obj\Debug\net5.0-windows\sh.genruntimeconfig.cache
-C:\Users\vladi\Desktop\SysProg\SysProg-lab4\sh\obj\Debug\net5.0-windows\sh.csprojAssemblyReference.cache

@@ -23,23 +23,30 @@ namespace l1
         private static extern void Send(int evType, int evId, StringBuilder msg);
 
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        private static extern void StartThread(int evType);
+        [return: MarshalAs(UnmanagedType.I1)]
+        private static extern bool StartThread(int evType);
 
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        private static extern void StopThread(int evType);
+        [return: MarshalAs(UnmanagedType.I1)]
+        private static extern bool StopThread(int evType);
 
-        [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        private static extern void PassTo(int evType, int thId = 0, StringBuilder msg = null);
+
 
         bool Server = false;
 
         public Lab4() 
-        { 
-            InitializeComponent(); 
-            //StartServer(0);
+        {
+            //Process[] pname = Process.GetProcessesByName("lab4cpp.exe");
+
+            //if (pname.Length == 0)
+            //    MessageBox.Show("nothing");
+            //else
+            //    MessageBox.Show("run");
+            
+            InitializeComponent();
             listBox1.Items.Add("All Threads\n");
             listBox1.Items.Add("Main Thread\n");
-            //Server = true;
+
         }
 
 
@@ -47,20 +54,30 @@ namespace l1
         {
             int thread_number = (int)thread_count.Value;            
             StringBuilder start = new StringBuilder("Start");
-                for (int i = 0; i < thread_number; i++)
+           
+            
+            for (int i = 0; i < thread_number; i++)
                 {
-                    StartThread(0);
+                if (StartThread(0) == true)
+                {
+                    
                     listBox1.Items.Add("id " + thread_id++.ToString() + "\n");
+                    label1.Visible = false;
+                    label1.Text = "";
+                }
+                else 
+                {
+                    listBox1.Items.Clear();
+                    label1.Visible = true; label1.Text = "No Pipes Available";
+                    listBox1.Items.Add("All Threads\n");
+                    listBox1.Items.Add("Main Thread\n");
+                }
                 }
         }
 
         private void Stop_click(object sender, EventArgs e)
         {
-
-            //if (!(Server == true))
-            //    return;
             StopThread(1);
-
             if (thread_id > 1)
                 listBox1.Items.RemoveAt(thread_id--);
             else

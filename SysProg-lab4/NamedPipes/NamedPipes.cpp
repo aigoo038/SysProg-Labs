@@ -15,9 +15,17 @@
 BEGIN_MESSAGE_MAP(CNamedPipesApp, CWinApp)
 END_MESSAGE_MAP()
 
+void ErrorMessage() 
+{
+	CString s = "No pipes available";
+	AfxMessageBox(s);
+}
+
+
 CNamedPipesApp::CNamedPipesApp()
 {
 }
+
 
 CNamedPipesApp theApp;
 
@@ -44,10 +52,8 @@ extern "C"
 				if (WaitNamedPipe(PIPE_NAME, 5000))
 				{
 					HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-					DWORD dwRead, dwWrite;
-
+					DWORD dwWrite;
 					WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
-
 					CloseHandle(hPipe);
 				}
 				break;
@@ -58,10 +64,10 @@ extern "C"
 				{
 					int strSize = strlen(msg) + 1;
 					HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
-					DWORD dwRead, dwWrite;
+					DWORD dwWrite;
 					WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
 					WriteFile(hPipe, LPCVOID(&thId), sizeof(thId), &dwWrite, NULL);
-					WriteFile(hPipe, LPCVOID(msg), sizeof(strSize), &dwWrite, NULL);
+					WriteFile(hPipe, LPCVOID(msg), strlen(msg), &dwWrite, NULL);
 					CloseHandle(hPipe);
 				}
 				break;
@@ -73,23 +79,30 @@ extern "C"
 				CreateProcess(NULL, (LPSTR)"..\\..\\Debug\\lab4cpp.exe", NULL, NULL, TRUE, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi);
 				CloseHandle(pi.hThread);
 				CloseHandle(pi.hProcess);
+				break;
 			}
 		}
 	}
 
-	_declspec(dllexport) void __stdcall StartThread(int evType)
-	{
-		
+	__declspec(dllexport) bool StartThread(int evType)
+	{	
 		if (WaitNamedPipe(PIPE_NAME, 5000))
 		{
+
 			HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 			DWORD dwWrite;
 			WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
 			CloseHandle(hPipe);
+			return true;
+		}
+		else 
+		{
+			return false;
+			//ErrorMessage();
 		}
 	}
 
-	//_declspec(dllexport) void __stdcall StartServer(int evType)
+	//__declspec(dllexport) bool StartServer(int evType)
 	//{
 	//	STARTUPINFO si = { sizeof(si) };
 	//	PROCESS_INFORMATION pi;
@@ -99,14 +112,22 @@ extern "C"
 	//}
 
 
-	_declspec(dllexport) void __stdcall StopThread(int evType)
+	__declspec(dllexport) bool StopThread(int evType)
 	{
 		if (WaitNamedPipe(PIPE_NAME, 5000))
 		{
 			HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 			DWORD dwWrite;
+
 			WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
+
 			CloseHandle(hPipe);
+			return true;
+		}
+		else
+		{
+			return false;
+			//ErrorMessage();
 		}
 	}
 
@@ -115,12 +136,17 @@ extern "C"
 	 {
 		if (WaitNamedPipe(PIPE_NAME, 5000))
 		{
+			int strSize = strlen(msg) + 1;
 			HANDLE hPipe = CreateFile(PIPE_NAME, GENERIC_READ | GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, NULL);
 			DWORD dwWrite;			
 			WriteFile(hPipe, LPCVOID(&evType), sizeof(evType), &dwWrite, NULL);
 			WriteFile(hPipe, LPCVOID(&thId), sizeof(thId), &dwWrite, NULL); 
 			WriteFile(hPipe, LPCVOID(msg), strlen(msg), &dwWrite, NULL);
 			CloseHandle(hPipe);
+		}
+		else
+		{
+			ErrorMessage();
 		}
 	}
 }
