@@ -94,7 +94,7 @@ extern "C"
 		{
 			s.Send(LPCVOID(&evType), sizeof(evType));
 			s.Send(LPCVOID(&thId), sizeof(thId));
-			s.Send(LPCVOID(&msg), sizeof(msg));
+			s.Send(LPCVOID(&msg), strlen(msg));
 			s.Close();
 			return true;
 		}

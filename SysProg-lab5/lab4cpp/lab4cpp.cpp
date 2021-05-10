@@ -97,12 +97,13 @@ void start()
             {
                 const int MAXLEN = 1024;
                 int thId = 0;
-                DWORD msgRead;
+                
                 char buff[MAXLEN + 1];
                 s.Receive(LPVOID(&thId), sizeof(thId));
-                s.Receive(LPVOID(&buff), sizeof(MAXLEN));
+                s.Receive(LPVOID(&buff), MAXLEN);
                 buff[MAXLEN] = 0;
-                string msg(buff);  
+                string msg(buff);
+
                 if (!thId == 0)
                 {
                     WriteToFile(thId, msg.c_str());

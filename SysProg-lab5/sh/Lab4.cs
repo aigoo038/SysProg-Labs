@@ -39,16 +39,16 @@ namespace l1
         public Lab4() 
         {
             InitializeComponent();
-            ServerDef();
+            UpdateInfo();
         }
 
-        public void ServerDef() 
+        public void UpdateInfo() 
         {
             listBox1.Items.Clear();
             int threads = GetAmount(3);
             listBox1.Items.Add("All Threads\n");
             listBox1.Items.Add("Main Thread\n");
-            if (threads != 0)
+            if (threads > 0)
             {
                 for (int i = 1; i < threads; i++)
                 {
@@ -59,6 +59,7 @@ namespace l1
         }
         private void Start_Click(object sender, EventArgs e)
         {
+            UpdateInfo();
             int thread_number = (int)thread_count.Value;
   
             for (int i = 0; i < thread_number; i++)
@@ -79,6 +80,7 @@ namespace l1
 
         private void Stop_click(object sender, EventArgs e)
         {
+            UpdateInfo();
             StopThread(1);
             if (thread_id > 1)
                 listBox1.Items.RemoveAt(thread_id--);
