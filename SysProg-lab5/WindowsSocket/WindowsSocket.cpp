@@ -23,6 +23,25 @@ CWindowsSocketApp::CWindowsSocketApp()
 CWindowsSocketApp theApp;
 extern "C" 
 {
+	__declspec(dllexport) int GetAmount(int evType)
+	{
+		int amount = NULL;
+		AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0);
+		AfxSocketInit();
+		CSocket s;
+		s.Create();
+
+		if (s.Connect("127.0.0.1", 12345))
+		{
+			s.Send(LPCVOID(&evType), sizeof(evType));
+			s.Receive(LPVOID(&amount), sizeof(amount));
+			s.Close();
+			return amount;
+		}
+		else return 0;
+		
+	}
+
 	__declspec(dllexport) bool StartThread(int evType)
 	{
 		AfxWinInit(::GetModuleHandle(NULL), NULL, ::GetCommandLine(), 0);

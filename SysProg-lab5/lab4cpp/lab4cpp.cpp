@@ -13,35 +13,33 @@ CWinApp theApp;
 using namespace std;
 
 
-DWORD WINAPI YeahThread(LPVOID lpParameter)//, SOCKET hSock)
+DWORD WINAPI YeahThread(LPVOID lpParameter, SOCKET hSock)
 {
-    //CSocket s;
-    //s.Attach(hSock);
+    CSocket s;
+    s.Attach(hSock);
     int id = int(lpParameter);
-    HANDLE hEventStop = CreateEvent(NULL, TRUE, FALSE, "EventStop");
+    auto MessageName = "EventStop" + InttoStr(id);
+
+    HANDLE evStop = CreateEvent(NULL, TRUE, FALSE, MessageName.c_str());
     HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
   
-    HANDLE hEvents[] = { hEventStop };
+    HANDLE hEvents[] = { evStop };
 
     WaitForSingleObject(hMutex, INFINITE);
     std::cout << "\nThread started  " << InttoStr(id) << std::endl;
     ReleaseMutex(hMutex);
     while (true)
-    {
-        DWORD dwResult = WaitForMultipleObjects(1, hEvents, FALSE, INFINITE) - WAIT_OBJECT_0;
-        
-        switch (dwResult)
+    {      
+        switch (WaitForMultipleObjects(1, hEvents, FALSE, INFINITE) - WAIT_OBJECT_0)
         {
             case 0:
-            {
-           
-                ResetEvent(hEventStop);
+            {          
+                ResetEvent(evStop);
                 WaitForSingleObject(hMutex, INFINITE);
-                std::cout << "\nThread stopped  " << std::endl; 
+                std::cout << "\nThread stopped  " << InttoStr(id) << std::endl;
                 ReleaseMutex(hMutex);
-                stop = false;
                 return 0;
-                break;
+
             }
             
         }
@@ -52,10 +50,12 @@ DWORD WINAPI YeahThread(LPVOID lpParameter)//, SOCKET hSock)
 
 void start() 
 {
-    SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-    HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
-    HANDLE evStop = CreateEvent(NULL, TRUE, FALSE, "EventStop");
     int thread_index = 1;
+    SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
+    
+    HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
+      
+    
     AfxSocketInit();
     CSocket Server;
     Server.Create(12345);
@@ -73,7 +73,7 @@ void start()
             case 0:
             {
                 //CreateThread(NULL, FALSE, YeahThread, (LPVOID)thread_index++, 0, NULL);
-                thread t(YeahThread, (LPVOID)thread_index++);//, s.Detach());
+                thread t(YeahThread, (LPVOID)thread_index++, s.Detach());
                 t.detach();
                 break;
             }
@@ -82,17 +82,15 @@ void start()
             {
                 if (!(thread_index == 1))
                 {
-                    stop = true;
+                    auto MessageName = "EventStop" + InttoStr(thread_index-- - 1);
+
+                    auto evStop = CreateEvent(NULL, TRUE, FALSE, MessageName.c_str());
                     SetEvent(evStop);
-                    thread_index--;
-                    ResetEvent(evStop);
+                    CloseHandle(evStop);
                     break;
                 }
-                else
-                {
-                    return;
-                }
                 break;
+
             }
 
             case 2:
@@ -103,7 +101,7 @@ void start()
                 char buff[MAXLEN + 1];
                 s.Receive(LPVOID(&thId), sizeof(thId));
                 s.Receive(LPVOID(&buff), sizeof(MAXLEN));
-                buff[MAXLEN] = 0;//[min(MAXLEN, msgRead)] = 0;
+                buff[MAXLEN] = 0;
                 string msg(buff);  
                 if (!thId == 0)
                 {
@@ -117,7 +115,11 @@ void start()
                 }
                 break;
             }
-            CloseHandle(evStop);
+            case 3: 
+            {
+                s.Send(LPCVOID(&thread_index), sizeof(thread_index));
+            }
+            //
         }
        
         

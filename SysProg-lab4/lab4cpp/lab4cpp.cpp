@@ -24,7 +24,7 @@ UINT __cdecl YeahThread(LPVOID lpParameter)
 
     auto StopName = "EventStop" + InttoStr(id);
 
-    HANDLE hEventStop = CreateEvent(NULL, TRUE, FALSE, "EventStop");
+    HANDLE hEventStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
     HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
    
     HANDLE hEvents[] = { hEventStop };
@@ -34,9 +34,7 @@ UINT __cdecl YeahThread(LPVOID lpParameter)
     ReleaseMutex(hMutex);
     while (true)
     {
-        DWORD dwResult = WaitForMultipleObjects(1, hEvents, FALSE, INFINITE) - WAIT_OBJECT_0;
-        
-        switch (dwResult)
+        switch (WaitForMultipleObjects(1, hEvents, FALSE, INFINITE) - WAIT_OBJECT_0)
         {
            
             case 0:
@@ -46,7 +44,7 @@ UINT __cdecl YeahThread(LPVOID lpParameter)
                 WaitForSingleObject(hMutex, INFINITE);
                 std::cout << "\nThread stopped  " << std::endl; //<< InttoStr(id) << std::endl;
                 ReleaseMutex(hMutex);
-                stop = false;
+
                 return 0;
             }
         }
@@ -66,8 +64,6 @@ void start()
         int evType = NULL;
         HANDLE hPipe = CreateNamedPipe(PIPE_NAME, PIPE_ACCESS_DUPLEX, PIPE_TYPE_MESSAGE | PIPE_READMODE_MESSAGE | PIPE_WAIT, PIPE_UNLIMITED_INSTANCES, 1024, 1024, 0, NULL);
         HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
-        //int stop = 10;
-        HANDLE evStop = CreateEvent(NULL, TRUE, FALSE, "EventStop");
         DWORD dwRead, dwWrite;
         ConnectNamedPipe(hPipe, NULL);
         ReadFile(hPipe, LPVOID(&evType), sizeof(evType), &dwRead, NULL);
@@ -88,14 +84,12 @@ void start()
             
             if (!(thread_index == 1))
             {
-                stop = true;
+                auto StopName = "EventStop" + InttoStr(thread_index-- - 1);
+                auto evStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
                 SetEvent(evStop);
-                thread_index--;
+                //thread_index--;
                 CloseHandle(evStop);
-            }
-            else
-            {
-                return;
+                break;
             }
             FlushFileBuffers(hPipe);
             DisconnectNamedPipe(hPipe);
@@ -130,6 +124,10 @@ void start()
                 CloseHandle(hPipe);
             }
             break;
+        }
+        case 3:
+        {
+            WriteFile(hPipe, LPCVOID(&thread_index), sizeof(thread_index), &dwWrite, NULL);
         }
 
         }

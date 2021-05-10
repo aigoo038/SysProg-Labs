@@ -32,26 +32,38 @@ namespace l1
         [return: MarshalAs(UnmanagedType.I1)]
         private static extern bool StopThread(int evType);
 
+        [DllImport("..\\WindowsSocket.dll", CharSet = CharSet.Ansi)]
+        private static extern int GetAmount(int evType);
 
-
-        bool Server = false;
-
+        
         public Lab4() 
         {
             InitializeComponent();
-            listBox1.Items.Add("All Threads\n");
-            listBox1.Items.Add("Main Thread\n");
+            ServerDef();
         }
 
-
+        public void ServerDef() 
+        {
+            listBox1.Items.Clear();
+            int threads = GetAmount(3);
+            listBox1.Items.Add("All Threads\n");
+            listBox1.Items.Add("Main Thread\n");
+            if (threads != 0)
+            {
+                for (int i = 1; i < threads; i++)
+                {
+                    listBox1.Items.Add("id " + i.ToString() + "\n");
+                }
+                thread_id = threads;
+            }
+        }
         private void Start_Click(object sender, EventArgs e)
         {
             int thread_number = (int)thread_count.Value;
-            // StartServer(0);
-   
+  
             for (int i = 0; i < thread_number; i++)
                 {
-                    if (StartThread(0))// == true)
+                    if (StartThread(0))
                     {
                         listBox1.Items.Add("id " + thread_id++.ToString() + "\n");
                         label1.Visible = false;
@@ -61,8 +73,6 @@ namespace l1
                     {
                         listBox1.Items.Clear();
                         label1.Visible = true; label1.Text = "No Available Server";
-                        listBox1.Items.Add("All Threads\n");
-                        listBox1.Items.Add("Main Thread\n");
                     }
                 }
         }
@@ -74,7 +84,6 @@ namespace l1
                 listBox1.Items.RemoveAt(thread_id--);
             else
             {
-                Server = false;
                 listBox1.Items.Clear();
 
             }

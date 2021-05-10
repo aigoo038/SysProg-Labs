@@ -30,25 +30,38 @@ namespace l1
         [return: MarshalAs(UnmanagedType.I1)]
         private static extern bool StopThread(int evType);
 
+        [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
+        private static extern int GetAmount(int evType);
 
 
         bool Server = false;
 
         public Lab4() 
         {
-            //Process[] pname = Process.GetProcessesByName("lab4cpp.exe");
-
-            //if (pname.Length == 0)
-            //    MessageBox.Show("nothing");
-            //else
-            //    MessageBox.Show("run");
             
-            InitializeComponent();
-            listBox1.Items.Add("All Threads\n");
-            listBox1.Items.Add("Main Thread\n");
+            InitializeComponent(); ServerDef();
+            //listBox1.Items.Add("All Threads\n");
+            //listBox1.Items.Add("Main Thread\n");
 
         }
 
+        public void ServerDef()
+        {
+            //listBox1.Items.Clear();
+            listBox1.Items.Add("All Threads\n");
+            listBox1.Items.Add("Main Thread\n");
+            int threads = GetAmount(3);
+            if (threads != 0)
+            {
+                listBox1.Items.Add("All Threads\n");
+                listBox1.Items.Add("Main Thread\n");
+                for (int i = 1; i < threads; i++)
+                {
+                    listBox1.Items.Add("id " + i.ToString() + "\n");
+                }
+                thread_id = threads;
+            }
+        }
 
         private void Start_Click(object sender, EventArgs e)
         {
