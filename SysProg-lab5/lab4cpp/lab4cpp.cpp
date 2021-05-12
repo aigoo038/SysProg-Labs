@@ -19,12 +19,9 @@ DWORD WINAPI YeahThread(LPVOID lpParameter, SOCKET hSock)
     s.Attach(hSock);
     int id = int(lpParameter);
     auto MessageName = "EventStop" + InttoStr(id);
-
     HANDLE evStop = CreateEvent(NULL, TRUE, FALSE, MessageName.c_str());
     HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
-  
     HANDLE hEvents[] = { evStop };
-
     WaitForSingleObject(hMutex, INFINITE);
     std::cout << "\nThread started  " << InttoStr(id) << std::endl;
     ReleaseMutex(hMutex);
@@ -39,7 +36,6 @@ DWORD WINAPI YeahThread(LPVOID lpParameter, SOCKET hSock)
                 std::cout << "\nThread stopped  " << InttoStr(id) << std::endl;
                 ReleaseMutex(hMutex);
                 return 0;
-
             }
             
         }
@@ -52,27 +48,22 @@ void start()
 {
     int thread_index = 1;
     SetPriorityClass(GetCurrentProcess(), REALTIME_PRIORITY_CLASS);
-    
     HANDLE hMutex = CreateMutex(NULL, FALSE, "YeahMutex");
-      
-    
     AfxSocketInit();
     CSocket Server;
     Server.Create(12345);
     Server.Listen();
 
-    cout << Server << endl;
-    while (1)
+    while (true)
     {
         CSocket s; 
         Server.Accept(s);
-        int evType = -1;
+        int evType = NULL;
         s.Receive(LPVOID(&evType), sizeof(evType));
         switch (evType)
         {
             case 0:
             {
-                //CreateThread(NULL, FALSE, YeahThread, (LPVOID)thread_index++, 0, NULL);
                 thread t(YeahThread, (LPVOID)thread_index++, s.Detach());
                 t.detach();
                 break;
@@ -83,7 +74,6 @@ void start()
                 if (!(thread_index == 1))
                 {
                     auto MessageName = "EventStop" + InttoStr(thread_index-- - 1);
-
                     auto evStop = CreateEvent(NULL, TRUE, FALSE, MessageName.c_str());
                     SetEvent(evStop);
                     CloseHandle(evStop);
@@ -96,10 +86,10 @@ void start()
             case 2:
             {
                 const int MAXLEN = 1024;
-                int thId = 0;
-                
+                int thId, strSize = 0;
                 char buff[MAXLEN + 1];
                 s.Receive(LPVOID(&thId), sizeof(thId));
+                s.Receive(LPVOID(&strSize), sizeof(strSize));
                 s.Receive(LPVOID(&buff), MAXLEN);
                 buff[MAXLEN] = 0;
                 string msg(buff);
@@ -120,7 +110,6 @@ void start()
             {
                 s.Send(LPCVOID(&thread_index), sizeof(thread_index));
             }
-            //
         }
        
         

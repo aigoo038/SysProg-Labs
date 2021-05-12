@@ -23,7 +23,8 @@ CMessageApp theApp;
 
 using namespace std;
 
-struct Message {
+struct Message 
+{
 	int i;
 	char s[];
 };

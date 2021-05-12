@@ -19,8 +19,8 @@ CWindowsSocketApp::CWindowsSocketApp()
 {
 }
 
-
 CWindowsSocketApp theApp;
+
 extern "C" 
 {
 	__declspec(dllexport) int GetAmount(int evType)
@@ -39,7 +39,6 @@ extern "C"
 			return amount;
 		}
 		else return 0;
-		
 	}
 
 	__declspec(dllexport) bool StartThread(int evType)
@@ -69,7 +68,6 @@ extern "C"
 		AfxSocketInit();
 		CSocket s;
 		s.Create();
-
 		if (s.Connect("127.0.0.1", 12345))
 		{
 			s.Send(LPCVOID(&evType), sizeof(evType));
@@ -92,8 +90,10 @@ extern "C"
 		s.Create();
 		if (s.Connect("127.0.0.1", 12345))
 		{
+			int Size = strlen(msg) + 1;
 			s.Send(LPCVOID(&evType), sizeof(evType));
 			s.Send(LPCVOID(&thId), sizeof(thId));
+			s.Send(LPCVOID(&Size), sizeof(Size));
 			s.Send(LPCVOID(&msg), strlen(msg));
 			s.Close();
 			return true;
@@ -110,6 +110,5 @@ extern "C"
 BOOL CWindowsSocketApp::InitInstance()
 {
 	CWinApp::InitInstance();
-
 	return TRUE;
 }

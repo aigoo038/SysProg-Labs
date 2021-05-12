@@ -38,16 +38,13 @@ namespace l1
 
         public Lab4() 
         {
-            
-            InitializeComponent(); ServerDef();
-            //listBox1.Items.Add("All Threads\n");
-            //listBox1.Items.Add("Main Thread\n");
-
+            InitializeComponent(); 
+            ServerDef();
         }
 
         public void ServerDef()
         {
-            //listBox1.Items.Clear();
+            listBox1.Items.Clear();
             listBox1.Items.Add("All Threads\n");
             listBox1.Items.Add("Main Thread\n");
             int threads = GetAmount(3);
@@ -65,15 +62,15 @@ namespace l1
 
         private void Start_Click(object sender, EventArgs e)
         {
+            ServerDef();
             int thread_number = (int)thread_count.Value;            
             StringBuilder start = new StringBuilder("Start");
            
             
             for (int i = 0; i < thread_number; i++)
                 {
-                if (StartThread(0) == true)
-                {
-                    
+                if (StartThread(0))
+                {  
                     listBox1.Items.Add("id " + thread_id++.ToString() + "\n");
                     label1.Visible = false;
                     label1.Text = "";
@@ -82,14 +79,13 @@ namespace l1
                 {
                     listBox1.Items.Clear();
                     label1.Visible = true; label1.Text = "No Pipes Available";
-                    listBox1.Items.Add("All Threads\n");
-                    listBox1.Items.Add("Main Thread\n");
                 }
                 }
         }
 
         private void Stop_click(object sender, EventArgs e)
         {
+            ServerDef();
             StopThread(1);
             if (thread_id > 1)
                 listBox1.Items.RemoveAt(thread_id--);

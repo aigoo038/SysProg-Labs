@@ -57,13 +57,12 @@ UINT __cdecl YeahThread(LPVOID lpParameter)
     HANDLE hEventPrint = CreateEvent(NULL, TRUE, FALSE, "EventPrint");
     HANDLE hEventStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
     HANDLE hFile = CreateEvent(NULL, TRUE, FALSE, MessageName.c_str());
-    HANDLE hMain = CreateEvent(NULL, TRUE, FALSE, "evMain");
     WaitForSingleObject(hMutex, INFINITE);
     std::cout << "\nThread started  " << toStr(id) << std::endl;
     ReleaseMutex(hMutex);
-    HANDLE hEvents[] = { hEventPrint, hEventStop,  hFile, hMain };
+    HANDLE hEvents[] = { hEventPrint, hEventStop,  hFile };
     while (true) {
-        switch (WaitForMultipleObjects(4, hEvents, FALSE, INFINITE) - WAIT_OBJECT_0)
+        switch (WaitForMultipleObjects(3, hEvents, FALSE, INFINITE) - WAIT_OBJECT_0)
         {
             case 0:
             {
@@ -128,7 +127,7 @@ void start() {
                 auto StopName = "EventStop" + toStr(thread_index);
                 HANDLE hlEventStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
                 SetEvent(hlEventStop);
-                ResetEvent(hlEventStop);
+               // ResetEvent(hlEventStop);
                 SetEvent(evSubmit);
             }
             break;

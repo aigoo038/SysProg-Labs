@@ -15,13 +15,9 @@ CWinApp theApp;
 using namespace std;
 
 
-bool stop = false;
-
 UINT __cdecl YeahThread(LPVOID lpParameter)
 {
-    
     int id = int(lpParameter);
-
     auto StopName = "EventStop" + InttoStr(id);
 
     HANDLE hEventStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
@@ -39,12 +35,10 @@ UINT __cdecl YeahThread(LPVOID lpParameter)
            
             case 0:
             {
-           
                 ResetEvent(hEventStop);
                 WaitForSingleObject(hMutex, INFINITE);
-                std::cout << "\nThread stopped  " << std::endl; //<< InttoStr(id) << std::endl;
+                std::cout << "\nThread stopped  " << InttoStr(id) << std::endl;
                 ReleaseMutex(hMutex);
-
                 return 0;
             }
         }
@@ -87,7 +81,6 @@ void start()
                 auto StopName = "EventStop" + InttoStr(thread_index-- - 1);
                 auto evStop = CreateEvent(NULL, TRUE, FALSE, StopName.c_str());
                 SetEvent(evStop);
-                //thread_index--;
                 CloseHandle(evStop);
                 break;
             }
