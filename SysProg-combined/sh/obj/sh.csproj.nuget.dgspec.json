@@ -1,27 +1,27 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\sh\\sh.csproj": {}
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\sh\\sh.csproj": {}
   },
   "projects": {
-    "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\lab4cpp\\lab4cpp.vcxproj": {
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\lab4cpp\\lab4cpp.vcxproj": {
       "restore": {
-        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\lab4cpp\\lab4cpp.vcxproj",
+        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\lab4cpp\\lab4cpp.vcxproj",
         "projectName": "lab4cpp",
-        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\lab4cpp\\lab4cpp.vcxproj"
+        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\lab4cpp\\lab4cpp.vcxproj"
       },
       "frameworks": {
         "native": {}
       }
     },
-    "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\sh\\sh.csproj": {
+    "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\sh\\sh.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\sh\\sh.csproj",
+        "projectUniqueName": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\sh\\sh.csproj",
         "projectName": "sh",
-        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\sh\\sh.csproj",
+        "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\sh\\sh.csproj",
         "packagesPath": "C:\\Users\\vladi\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\sh\\obj\\",
+        "outputPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\sh\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\vladi\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -38,8 +38,8 @@
           "net5.0-windows7.0": {
             "targetAlias": "net5.0-windows",
             "projectReferences": {
-              "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\lab4cpp\\lab4cpp.vcxproj": {
-                "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg-lab5\\lab4cpp\\lab4cpp.vcxproj"
+              "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\lab4cpp\\lab4cpp.vcxproj": {
+                "projectPath": "C:\\Users\\vladi\\Desktop\\SysProg\\SysProg-combined\\lab4cpp\\lab4cpp.vcxproj"
               }
             }
           }

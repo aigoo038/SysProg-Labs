@@ -34,10 +34,6 @@ namespace l1
         [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
         private static extern int NPGetAmount(int evType);
 
-        [DllImport("..\\NamedPipes.dll", CharSet = CharSet.Ansi)]
-        [return: MarshalAs(UnmanagedType.I1)]
-        private static extern bool NPSetMod(int modType);
-
 
         [DllImport("..\\WindowsSocket.dll", CharSet = CharSet.Ansi)]
         [return: MarshalAs(UnmanagedType.I1)]
@@ -56,7 +52,6 @@ namespace l1
 
         [DllImport("..\\WindowsSocket.dll", CharSet = CharSet.Ansi)]
         private static extern bool SocketSetMod(int modType);
-
 
         public bool StartThread(int mt)
         {
@@ -84,9 +79,10 @@ namespace l1
 
         public bool SendMessage(int mt, int id, StringBuilder s)
         {
+            StringBuilder text = new StringBuilder(s + "1111");
             if (mt == 1)
             {
-                return SocketSend(2, id, s);
+                return SocketSend(2, id, text);
             }
             else
             {
@@ -100,11 +96,11 @@ namespace l1
             DllCh.Items.AddRange(new object[] { "NamedPipe", "Socket" });
             DllCh.SelectedItem = "Socket";
             UpdateInfo();
+            
         }
 
         public void UpdateInfo() 
         {
-           
             listBox1.Items.Clear();
             if (DllCh.SelectedItem.ToString() == "Socket")
                 modType = 1;
@@ -126,12 +122,14 @@ namespace l1
 
         private void Start_Click(object sender, EventArgs e)
         {
+
             UpdateInfo();
             if (thread_id == 1)
             {
                 SocketSetMod(modType);
             }
-            
+
+            DllCh.Enabled = false;
             
             int thread_number = (int)thread_count.Value;
   
@@ -147,6 +145,8 @@ namespace l1
                     {
                         listBox1.Items.Clear();
                         label1.Visible = true; label1.Text = "No Available Server";
+                        DllCh.Enabled = true;
+                        thread_id = 1;
                     }
                 }
         }
@@ -154,12 +154,15 @@ namespace l1
         private void Stop_click(object sender, EventArgs e)
         {
             UpdateInfo();
+            
             StopThread(modType);
             if (thread_id > 1)
                 listBox1.Items.RemoveAt(thread_id--);
             else
             {
+                Stop.Enabled = false;
                 listBox1.Items.Clear();
+                thread_id = 1;
             }
         }
 
@@ -181,16 +184,16 @@ namespace l1
                 {
                     for (int i = 1; i < thread_id + 1; i++)
                     {
-                        SendMessage(2, i, fileText);
+                        SendMessage(modType, i, fileText);
                     }
                 }
                 else if (listBox1.SelectedItem.ToString() == "Main Thread\n")
                 {
-                    SendMessage(2, 0,  fileText);
+                    SendMessage(modType, 0,  fileText);
                 }
                 else
                 {
-                    SendMessage(2, index, fileText);
+                    SendMessage(modType, index, fileText);
                 }
             }
         }

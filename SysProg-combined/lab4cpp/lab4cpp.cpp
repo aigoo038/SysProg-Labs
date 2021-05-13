@@ -13,9 +13,6 @@ CWinApp theApp;
 
 using namespace std;
 
-HMODULE hLib = LoadLibrary("NamedPipes.dll");
-auto NPRead = (int (*)())GetProcAddress(hLib, "NPReadMod");
-
 
 DWORD WINAPI YeahThread(LPVOID lpParameter)//, SOCKET hSock)
 {
